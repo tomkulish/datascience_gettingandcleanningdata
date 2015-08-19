@@ -25,3 +25,12 @@ if(!file.exists("data")) {
 ######################
 # Step 1: Get the data
 ######################
+fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+destFile <- ".\\data\\UCIDataset.zip"
+
+download.file(fileUrl, destfile = destFile)
+list.files(".\\data")
+# Unzip file
+files <- unzip(destFile, list=TRUE)
+unzip(destFile, exdir="data")
+
