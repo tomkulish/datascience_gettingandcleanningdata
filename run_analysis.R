@@ -49,5 +49,11 @@ trainSubjectFile <- "data\\UCI HAR Dataset\\train\\subject_train.txt"
 #####################
 # Step 2: Merge the data sets to create one dataset
 #####################
+# Load the data sets
 trainX <- read.table(trainXFile)
+trainY <- read.table(trainYFile)
+
+# Join the datasets and numbers
+trainingData <- cbind(trainY, trainX)
+
 
