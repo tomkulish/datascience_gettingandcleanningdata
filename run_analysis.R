@@ -16,7 +16,8 @@
 ######################
 
 # We want to set the working directory of your env to make this a bit easier as we go forward.
-setwd("C:\\Users\\me_000\\Documents\\GitHub\\datascience_gettingandcleanningdata")
+# This is commented out for execution on your local working directory.
+# setwd("C:\\Users\\me_000\\Documents\\GitHub\\datascience_gettingandcleanningdata")
 
 # We are going to store our data files in a data directory, lets make sure its created
 if(!file.exists("data")) {
@@ -26,6 +27,7 @@ if(!file.exists("data")) {
 # Install the reshape2 and load it.
 install.packages("reshape2")
 library(reshape2)
+# Probably not going to use this, might want to remove?
 
 install.packages("dplyr")
 library(dplyr)
@@ -44,7 +46,6 @@ unzip(destFile, exdir="data")
 
 # The files we are looking to play with:
 activityLabelsFile <- "data\\UCI HAR Dataset\\activity_labels.txt"
-activities <- c(1, 2, 3, 4, 5, 6)
 featuresFile <- "data\\UCI HAR Dataset\\features.txt"
 
 trainXFile <- "data\\UCI HAR Dataset\\train\\X_train.txt"
@@ -89,12 +90,20 @@ joinedDataOnlyMeanStdColumns <- joinedData[,grep("subject|activityId|mean|std", 
 ####################
 joinedDataOnlyMeanStdColumns <- left_join(joinedDataOnlyMeanStdColumns, activityLabelsData, by = "activityId")
 
-# Need to remove the second column? 
+# Need to remove the second column
+head(joinedDataOnlyMeanStdColumns)
+joinedDataOnlyMeanStdColumns$activityId <- NULL
+
+# Move the activity to the begining?
 
 ###################
 # Step 5: Approp label the dataset with descriptive variables
 ###################
 
+# Remove all the stupid ()
+names(joinedDataOnlyMeanStdColumns) <- gsub('\\(|\\)',"",names(joinedDataOnlyMeanStdColumns), perl = TRUE)
+# make.names to make synataically correct names
+names(joinedDataOnlyMeanStdColumns) <- make.names(names(joinedDataOnlyMeanStdColumns), unique = TRUE)
 
 ###################
 # Step 6: Run the dataset through a average of each activity and subject to create a 
