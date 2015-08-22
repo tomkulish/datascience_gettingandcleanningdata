@@ -27,7 +27,7 @@ if(!file.exists("data")) {
 # Install the reshape2 and load it.
 install.packages("reshape2")
 library(reshape2)
-# Probably not going to use this, might want to remove?
+
 
 install.packages("dplyr")
 library(dplyr)
@@ -54,6 +54,8 @@ testSubjectFile <- "data\\UCI HAR Dataset\\test\\subject_test.txt"
 testXFile <- "data\\UCI HAR Dataset\\test\\X_test.txt"
 testYFile <- "data\\UCI HAR Dataset\\test\\y_test.txt"
 trainSubjectFile <- "data\\UCI HAR Dataset\\train\\subject_train.txt"
+
+cleaFile <- "data\\cleanedData.txt"
 
 #####################
 # Step 2: Merge the data sets to create one dataset
@@ -94,7 +96,8 @@ joinedDataOnlyMeanStdColumns <- left_join(joinedDataOnlyMeanStdColumns, activity
 head(joinedDataOnlyMeanStdColumns)
 joinedDataOnlyMeanStdColumns$activityId <- NULL
 
-# Move the activity to the begining?
+# Move the activity to the begining
+joinedDataOnlyMeanStdColumns <- select(joinedDataOnlyMeanStdColumns, activity, everything())
 
 ###################
 # Step 5: Approp label the dataset with descriptive variables
@@ -105,7 +108,19 @@ names(joinedDataOnlyMeanStdColumns) <- gsub('\\(|\\)',"",names(joinedDataOnlyMea
 # make.names to make synataically correct names
 names(joinedDataOnlyMeanStdColumns) <- make.names(names(joinedDataOnlyMeanStdColumns), unique = TRUE)
 
+# Update Acc and Freq to fully qualified names
+names(joinedDataOnlyMeanStdColumns) <- gsub('Acc',"Acceleration",names(joinedDataOnlyMeanStdColumns))
+names(joinedDataOnlyMeanStdColumns) <- gsub('Freq\\.',"Frequency.",names(joinedDataOnlyMeanStdColumns))
+names(joinedDataOnlyMeanStdColumns) <- gsub('Freq$',"Frequency",names(joinedDataOnlyMeanStdColumns))
+
 ###################
 # Step 6: Run the dataset through a average of each activity and subject to create a 
 #         indepenent tidy dataset.
 ####################
+# So we want to melt the data using the reshape2, which will give us a long view of each activity.
+joinedDataOnlyMeanStdColumns.long <- melt(joinedDataOnlyMeanStdColumns, id = c("subject", "activity"))
+# We can then take that long view and summarize it by mean on subject and activity. A GROUP BY so to speak.
+joinedDataOnlyMeanStdColumns.wide <- dcast(joinedDataOnlyMeanStdColumns.long, subject + activity ~ variable, mean)
+
+# Now lets save the data.
+write.table(joinedDataOnlyMeanStdColumns.wide, cleanFile, row.names = FALSE)

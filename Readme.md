@@ -7,7 +7,7 @@ The run_analysis.R script creates a reproducable script in which to clean up and
 
 ### Prerequs
 * This was build using RStudio running R x64 3.2.1
-* The libraies dplyr is installed while running the run_analysis.R. If you cannot install this library this code will not successfully execute
+* The libraies dplyr and reshape2 is installed while running the run_analysis.R. If you cannot install this library this code will not successfully execute
 
 ### Run the program
 1. Open RStudio OR R
