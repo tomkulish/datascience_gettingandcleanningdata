@@ -23,6 +23,11 @@ if(!file.exists("data")) {
   dir.create("data")
 }
 
+# Install the reshape2 and load it.
+
+install.packages("reshape2")
+library(reshape2)
+
 ######################
 # Step 1: Get the data
 ######################
@@ -41,7 +46,7 @@ featuresFile <- "data\\UCI HAR Dataset\\features.txt"
 
 trainXFile <- "data\\UCI HAR Dataset\\train\\X_train.txt"
 trainYFile <- "data\\UCI HAR Dataset\\train\\y_train.txt"
-testSubjectFile <- "data\\UCI HAR Dataset\\test\\subject_test.tx"
+testSubjectFile <- "data\\UCI HAR Dataset\\test\\subject_test.txt"
 testXFile <- "data\\UCI HAR Dataset\\test\\X_test.txt"
 testYFile <- "data\\UCI HAR Dataset\\test\\y_test.txt"
 trainSubjectFile <- "data\\UCI HAR Dataset\\train\\subject_train.txt"
@@ -52,8 +57,39 @@ trainSubjectFile <- "data\\UCI HAR Dataset\\train\\subject_train.txt"
 # Load the data sets
 trainX <- read.table(trainXFile)
 trainY <- read.table(trainYFile)
+subjectTrain <- read.table(trainSubjectFile)
+
+testX <- read.table(testXFile)
+testY <- read.table(testYFile)
+subjectTest <- read.table(testSubjectFile)
+
+# Load features
+featuresData <- read.table(featuresFile, colClasses = c("character"))
+activityLablesData <- read.table(activityLabelsFile, col.names =  c("activityId", "activity"))
 
 # Join the datasets and numbers
-trainingData <- cbind(trainY, trainX)
+trainingData <- cbind(subjectTrain, trainY, trainX)
+testData <- cbind(subjectTest, testY, testX)
+joinedData <- rbind(trainingData, testData)
 
+joinedDataLabels <- rbind(c(1, "subject"), rbind(c(2,"activityId"), featuresData))[,2]
+names(joinedData) <- joinedDataLabels
+# We should now have a dataset that contains both the trained data and joined data
 
+####################
+# Step 3: We want to only get the columns that measure mean and std
+####################
+joinedDataOnlyMeanStdColumns <- joinedData[,grep("subject|activityId|mean|std", names(joinedData))]
+
+####################
+# Step 4: Lets getting better names from the activity dataset
+####################
+
+###################
+# Step 5: Approp label the dataset with descriptive variables
+###################
+
+###################
+# Step 6: Run the dataset through a average of each activity and subject to create a 
+#         indepenent tidy dataset.
+####################
