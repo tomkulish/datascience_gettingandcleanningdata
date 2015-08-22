@@ -24,9 +24,11 @@ if(!file.exists("data")) {
 }
 
 # Install the reshape2 and load it.
-
 install.packages("reshape2")
 library(reshape2)
+
+install.packages("dplyr")
+library(dplyr)
 
 ######################
 # Step 1: Get the data
@@ -42,6 +44,7 @@ unzip(destFile, exdir="data")
 
 # The files we are looking to play with:
 activityLabelsFile <- "data\\UCI HAR Dataset\\activity_labels.txt"
+activities <- c(1, 2, 3, 4, 5, 6)
 featuresFile <- "data\\UCI HAR Dataset\\features.txt"
 
 trainXFile <- "data\\UCI HAR Dataset\\train\\X_train.txt"
@@ -65,7 +68,7 @@ subjectTest <- read.table(testSubjectFile)
 
 # Load features
 featuresData <- read.table(featuresFile, colClasses = c("character"))
-activityLablesData <- read.table(activityLabelsFile, col.names =  c("activityId", "activity"))
+activityLabelsData <- read.table(activityLabelsFile, col.names =  c("activityId", "activity"))
 
 # Join the datasets and numbers
 trainingData <- cbind(subjectTrain, trainY, trainX)
@@ -82,12 +85,16 @@ names(joinedData) <- joinedDataLabels
 joinedDataOnlyMeanStdColumns <- joinedData[,grep("subject|activityId|mean|std", names(joinedData))]
 
 ####################
-# Step 4: Lets getting better names from the activity dataset
+# Step 4: Lets getting better names from the activity dataset and do a left_join no the activityID
 ####################
+joinedDataOnlyMeanStdColumns <- left_join(joinedDataOnlyMeanStdColumns, activityLabelsData, by = "activityId")
+
+# Need to remove the second column? 
 
 ###################
 # Step 5: Approp label the dataset with descriptive variables
 ###################
+
 
 ###################
 # Step 6: Run the dataset through a average of each activity and subject to create a 
