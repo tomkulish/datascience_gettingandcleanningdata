@@ -12,6 +12,6 @@ The run_analysis.R script creates a reproducable script in which to clean up and
 ### Run the program
 1. Open RStudio OR R
 2. Browse to the location you installed the program. Make it your working directory.
-3. Run source "run_analysis.R"
+3. Run source("run_analysis.R")
 
 ### Expected Output

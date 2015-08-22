@@ -55,7 +55,7 @@ testXFile <- "data\\UCI HAR Dataset\\test\\X_test.txt"
 testYFile <- "data\\UCI HAR Dataset\\test\\y_test.txt"
 trainSubjectFile <- "data\\UCI HAR Dataset\\train\\subject_train.txt"
 
-cleaFile <- "data\\cleanedData.txt"
+cleanFile <- "data\\cleanedData.txt"
 
 #####################
 # Step 2: Merge the data sets to create one dataset
