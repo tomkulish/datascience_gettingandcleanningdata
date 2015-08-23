@@ -5,7 +5,7 @@ The run_analysis.R script creates a reproducable script in which to clean up and
 
 ## Execution
 
-### Prerequs
+### Prereqs
 * This was build using RStudio running R x64 3.2.1
 * The libraies dplyr and reshape2 is installed while running the run_analysis.R. If you cannot install this library this code will not successfully execute
 
@@ -13,6 +13,7 @@ The run_analysis.R script creates a reproducable script in which to clean up and
 1. Open RStudio OR R
 2. Browse to the location you installed the program. Make it your working directory.
 3. Run source("run_analysis.R")
+4. The new tidy dataset will be stored in ./Data/cleanedData.txt
 
 ### Expected Output
 ```
@@ -64,3 +65,5 @@ Warning messages:
 1: package 'reshape2' was built under R version 3.2.2 
 2: package 'dplyr' was built under R version 3.2.2 
 ```
+
+The new tidy dataset will be stored in ./Data/cleanedData.txt
