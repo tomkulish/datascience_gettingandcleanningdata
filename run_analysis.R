@@ -19,6 +19,7 @@
 # This is commented out for execution on your local working directory.
 # setwd("C:\\Users\\me_000\\Documents\\GitHub\\datascience_gettingandcleanningdata")
 
+print("Staring run_analysis.R")
 # We are going to store our data files in a data directory, lets make sure its created
 if(!file.exists("data")) {
   dir.create("data")
@@ -35,6 +36,7 @@ library(dplyr)
 ######################
 # Step 1: Get the data
 ######################
+print("Downloading Data.")
 fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 destFile <- ".\\data\\UCIDataset.zip"
 
@@ -61,6 +63,7 @@ cleanFile <- "data\\cleanedData.txt"
 # Step 2: Merge the data sets to create one dataset
 #####################
 # Load the data sets
+print("Merging the train and test datasets.")
 trainX <- read.table(trainXFile)
 trainY <- read.table(trainYFile)
 subjectTrain <- read.table(trainSubjectFile)
@@ -85,11 +88,13 @@ names(joinedData) <- joinedDataLabels
 ####################
 # Step 3: We want to only get the columns that measure mean and std
 ####################
+print("Gathering the mean and std columns.")
 joinedDataOnlyMeanStdColumns <- joinedData[,grep("subject|activityId|mean|std", names(joinedData))]
 
 ####################
 # Step 4: Lets getting better names from the activity dataset and do a left_join no the activityID
 ####################
+print("Attaching the activity to the dataset.")
 joinedDataOnlyMeanStdColumns <- left_join(joinedDataOnlyMeanStdColumns, activityLabelsData, by = "activityId")
 
 # Need to remove the second column
@@ -102,7 +107,7 @@ joinedDataOnlyMeanStdColumns <- select(joinedDataOnlyMeanStdColumns, activity, e
 ###################
 # Step 5: Approp label the dataset with descriptive variables
 ###################
-
+print("Creating better column names.")
 # Remove all the stupid ()
 names(joinedDataOnlyMeanStdColumns) <- gsub('\\(|\\)',"",names(joinedDataOnlyMeanStdColumns), perl = TRUE)
 # make.names to make synataically correct names
@@ -117,6 +122,7 @@ names(joinedDataOnlyMeanStdColumns) <- gsub('Freq$',"Frequency",names(joinedData
 # Step 6: Run the dataset through a average of each activity and subject to create a 
 #         indepenent tidy dataset.
 ####################
+print("Creating the tidy dataset.")
 # So we want to melt the data using the reshape2, which will give us a long view of each activity.
 joinedDataOnlyMeanStdColumns.long <- melt(joinedDataOnlyMeanStdColumns, id = c("subject", "activity"))
 # We can then take that long view and summarize it by mean on subject and activity. A GROUP BY so to speak.
@@ -124,3 +130,5 @@ joinedDataOnlyMeanStdColumns.wide <- dcast(joinedDataOnlyMeanStdColumns.long, su
 
 # Now lets save the data.
 write.table(joinedDataOnlyMeanStdColumns.wide, cleanFile, row.names = FALSE)
+
+print("Program completed.")

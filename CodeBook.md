@@ -97,3 +97,4 @@ This book contains descriptions of the variables, the data, and any transformati
 * LAYING
 
 ## Tidy Data
+This is a mean of all of the extracted fields grouped by activity and subject. 
